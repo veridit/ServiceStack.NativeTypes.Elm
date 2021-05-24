@@ -1,15 +1,28 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using Funq;
-using ServiceStack;
-using ServiceStack.Configuration;
-using ElmSpa.ServiceInterface;
-
 namespace ElmSpa
 {
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.DependencyInjection;
+    using Funq;
+    using ServiceStack;
+    using ServiceInterface;
+
+    public class ElmSpa
+    {
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(builder =>
+                {
+                    builder.UseModularStartup<Startup>();
+                });
+    }
+
     public class Startup : ModularStartup
     {
         // This method gets called by the runtime. Use this method to add services to the container.

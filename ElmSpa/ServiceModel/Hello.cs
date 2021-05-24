@@ -1,7 +1,7 @@
-using ServiceStack;
-
 namespace ElmSpa.ServiceModel
 {
+    using ServiceStack;
+
     [Route("/hello")]
     [Route("/hello/{Name}")]
     public class Hello : IReturn<HelloResponse>

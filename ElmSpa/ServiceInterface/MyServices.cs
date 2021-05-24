@@ -1,9 +1,8 @@
-using System;
-using ServiceStack;
-using ElmSpa.ServiceModel;
-
 namespace ElmSpa.ServiceInterface
 {
+    using ServiceStack;
+    using ServiceModel;
+
     public class MyServices : Service
     {
         public object Any(Hello request)
