@@ -1,5 +1,18 @@
 {
-    "scripts": {
-        "dtos": "x ts && tsc -m umd dtos.ts && x -e \"mv('dtos.js','wwwroot/dtos.js')\""
-    }
+  "scripts": {
+    "build": "./node_modules/.bin/parcel build src/index.html --dist-dir wwwroot",
+    "dev": " ./node_modules/.bin/parcel serve src/index.html --dist-dir wwwroot",
+    "watch": "./node_modules/.bin/parcel watch src/index.html --dist-dir wwwroot",
+    "publish": "npm run build && dotnet publish -c Release",
+    "elm-unused": "./node_modules/.bin/elm-xref --format=json | jq \".[] | select(.file | endswith(\\\"Dtos.elm\\\") | not)\"",
+    "elm-outdated": "./node_modules/.bin/elm-outdated",
+    "elm-analyse": "./node_modules/.bin/elm-analyse",
+    "dtos": "elm-ref"
+  },
+  "devDependencies": {
+    "@parcel/transformer-elm": "^2.0.0-beta.2",
+    "@parcel/transformer-sass": "^2.0.0-beta.2",
+    "elm": "^0.19.1-5",
+    "parcel": "^2.0.0-beta.2"
+  }
 }

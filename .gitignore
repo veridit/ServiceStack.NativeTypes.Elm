@@ -6,6 +6,13 @@
 # Custom
 dist/
 
+# Elm related transient files
+elm-stuff/
+
+# Output from Parcel
+wwwroot/
+.parcel-cache/
+
 # User-specific files
 *.suo
 *.user
