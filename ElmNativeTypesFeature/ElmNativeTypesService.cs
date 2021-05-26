@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ServiceStack.DataAnnotations;
-using ServiceStack.Host;
 using ServiceStack.NativeTypes.Elm;
-using ServiceStack.Web;
-using TeTo.Entities.Shared;
 
 namespace ServiceStack.NativeTypes
 {

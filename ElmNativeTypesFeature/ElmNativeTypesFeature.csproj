@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <DebugType>portable</DebugType>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>ServiceStack.NativeTypes.Elm</PackageId>
+    <Title>Support for Elm code generator in ServiceStack.</Title>
+    <PackageDescription>
+      A ServiceStack feature for extending the native types generator with Elm support.
+      Available from "/types/elm".
+    </PackageDescription>
+    <PackageTags>ServiceStack;Plugin;Elm;Dto</PackageTags>
+    <Version>1.0.0-alpha</Version>
+    <Authors>Jørgen Hermanrud Fjeld</Authors>
+    <Company>Veridit as</Company>
+    <PackAsTool>false</PackAsTool>
+    <PackageProjectUrl>https://github.com/veridit/ServiceStack.NativeTypes.Elm</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/veridit/ServiceStack.NativeTypes.Elm</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
+    <!-- The SPDX name for the source license. See https://spdx.org/licenses/. -->
+    <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
+    <!-- Set all different possible dotnet version in one fell swoop https://stackoverflow.com/a/42183301 -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OneOf" Version="2.1.151" />
+    <PackageReference Include="ServiceStack" Version="5.8.0" />
+    <PackageReference Include="ServiceStack.Common" Version="5.8.0" />
+    <PackageReference Include="ServiceStack.Interfaces" Version="5.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="README.md">
+      <Pack>true</Pack>
+      <PackagePath>\</PackagePath>
+    </Content>
+  </ItemGroup>
+
+</Project>

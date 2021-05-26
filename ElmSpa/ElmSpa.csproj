@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ServiceStack" Version="5.9.*" />
+    <ProjectReference Include="../ElmNativeTypesFeature/ElmNativeTypesFeature.csproj" />
   </ItemGroup>
 
 </Project>

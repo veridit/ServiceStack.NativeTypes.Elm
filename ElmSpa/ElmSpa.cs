@@ -57,6 +57,7 @@ namespace ElmSpa
             {
                 DebugMode = AppSettings.Get(nameof(HostConfig.DebugMode), false)
             });
+            Plugins.Add(new ElmNativeTypesFeature() { });
         }
     }
 }
