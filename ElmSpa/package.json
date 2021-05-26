@@ -7,7 +7,7 @@
     "elm-unused": "./node_modules/.bin/elm-xref --format=json | jq \".[] | select(.file | endswith(\\\"Dtos.elm\\\") | not)\"",
     "elm-outdated": "./node_modules/.bin/elm-outdated",
     "elm-analyse": "./node_modules/.bin/elm-analyse",
-    "dtos": "elm-ref"
+    "dtos": "node elm-ref.js"
   },
   "devDependencies": {
     "@parcel/transformer-elm": "^2.0.0-beta.2",
