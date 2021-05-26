@@ -14,13 +14,7 @@ import Url.Parser exposing ((</>), (<?>), Parser, map, oneOf, parse, s, top)
 
 type Route
     = FrontRoute
-    | ClientInfoRoute
     | NotFoundRoute
-
-
-client_info_path : String
-client_info_path =
-    "client_info"
 
 
 {-| Translate from url to route.
@@ -31,9 +25,6 @@ routePath route =
     case route of
         FrontRoute ->
             absolute [] []
-
-        ClientInfoRoute ->
-            absolute [ client_info_path ] []
 
         NotFoundRoute ->
             absolute [] []
@@ -47,15 +38,14 @@ goTo key route =
         |> Browser.Navigation.pushUrl key
 
 
-matchers : Url -> Parser (Route -> a) a
-matchers url =
+matchers : Parser (Route -> a) a
+matchers =
     oneOf
         [ map FrontRoute top
-        , map ClientInfoRoute (s client_info_path)
         ]
 
 
 parseUrl : Url -> Route
 parseUrl url =
-    parse (matchers url) url
+    parse matchers url
         |> Maybe.withDefault NotFoundRoute

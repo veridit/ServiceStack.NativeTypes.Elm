@@ -1,22 +1,16 @@
-module Model exposing (Flags, Model, Page(..))
+module Model exposing (Flags, Model)
 
 import Browser.Navigation as Navigation
-import Ports exposing (ClientInfo)
-import Routing
-import Time
+import Dtos
+import Routing exposing (Route)
 
 
 type alias Model =
-    { navigationKey : Navigation.Key
-    , route : Routing.Route
-    , page : Page
-    , timeZone : Time.Zone
+    { navKey : Navigation.Key
+    , route : Route
+    , name : String
+    , helloResponse : Maybe Dtos.HelloResponse
     }
-
-
-type Page
-    = FrontPage
-    | ClientInfoPage (Maybe ClientInfo)
 
 
 type alias Flags =

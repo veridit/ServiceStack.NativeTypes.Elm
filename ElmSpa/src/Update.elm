@@ -2,37 +2,32 @@ module Update exposing (Msg(..), init, subscriptions, update)
 
 import Browser exposing (UrlRequest(..))
 import Browser.Navigation as Navigation
-import Model exposing (Flags, Model, Page(..))
-import Ports exposing (ClientInfo)
+import Dtos
+import Http
+import Model exposing (Flags, Model)
+import Ports
+import Result exposing (Result)
 import Routing exposing (Route(..))
-import Task
-import Time
 import Url exposing (Url)
 
 
 type Msg
     = OnUrlChange Url
     | OnUrlRequest UrlRequest
-    | NavigateTo Route
-    | ClientInfoReply ClientInfo
-    | GetTimeZone
-    | GetTimeZoneReply Time.Zone
+    | Hello String
+    | HelloResponse (Result Http.Error Dtos.HelloResponse)
+    | TestLogging
 
 
 init : Flags -> Url -> Navigation.Key -> ( Model, Cmd Msg )
-init _ url navigationKey =
-    { navigationKey = navigationKey
-    , page = FrontPage
-    , route = FrontRoute
-    , timeZone = Time.utc
-    }
-        |> routeTo url
-
-
-getTimeZone : (Time.Zone -> msg) -> Cmd msg
-getTimeZone callback =
-    Time.here
-        |> Task.perform callback
+init _ url navKey =
+    ( { navKey = navKey
+      , route = Routing.parseUrl url
+      , name = ""
+      , helloResponse = Nothing
+      }
+    , Cmd.none
+    )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -41,54 +36,29 @@ update msg model =
         OnUrlRequest urlRequest ->
             case urlRequest of
                 Internal newUrl ->
-                    ( model, Navigation.pushUrl model.navigationKey <| Url.toString newUrl )
+                    ( model, Navigation.pushUrl model.navKey <| Url.toString newUrl )
 
                 External newUrl ->
                     ( model, Navigation.load newUrl )
 
         OnUrlChange newUrl ->
-            routeTo newUrl model
+            ( { model | route = Routing.parseUrl newUrl }, Cmd.none )
 
-        ClientInfoReply clientInfo ->
-            case model.page of
-                ClientInfoPage _ ->
-                    ( { model | page = ClientInfoPage <| Just clientInfo }, Cmd.none )
+        Hello changedName ->
+            ( model
+            , Dtos.sendHello { name = changedName } HelloResponse
+            )
 
-                _ ->
-                    ( model, Ports.logError "ClientInfoReply unexpected page state" )
+        HelloResponse res ->
+            case res of
+                Ok helloResponse ->
+                    ( { model | helloResponse = Just helloResponse }, Cmd.none )
 
-        NavigateTo route ->
-            if route == model.route then
-                ( model, Ports.logWarning "Navigation to same route" )
+                Err _ ->
+                    ( model, Ports.logError "There was a server problem" )
 
-            else
-                ( model, Routing.goTo model.navigationKey route )
-
-        GetTimeZone ->
-            ( model, getTimeZone GetTimeZoneReply )
-
-        GetTimeZoneReply zone ->
-            ( { model | timeZone = zone }, Cmd.none )
-
-
-routeTo : Url -> Model -> ( Model, Cmd Msg )
-routeTo newUrl model =
-    let
-        newRoute =
-            Routing.parseUrl newUrl
-
-        newModel =
-            { model | route = newRoute }
-    in
-    case newRoute of
-        FrontRoute ->
-            ( { newModel | page = FrontPage }, getTimeZone GetTimeZoneReply )
-
-        ClientInfoRoute ->
-            ( { newModel | page = ClientInfoPage Nothing }, Ports.getClientInfo () )
-
-        NotFoundRoute ->
-            ( { newModel | page = FrontPage }
+        TestLogging ->
+            ( model
             , Cmd.batch
                 [ Ports.log "log test"
                 , Ports.logDebug "log debug"
@@ -99,11 +69,5 @@ routeTo newUrl model =
 
 
 subscriptions : Model -> Sub Msg
-subscriptions model =
-    let
-        everyHour =
-            always >> Time.every (60 * 60 * 1000)
-    in
-    Sub.batch
-        [ Ports.getClientInfoReply ClientInfoReply
-        ]
+subscriptions _ =
+    Sub.none
